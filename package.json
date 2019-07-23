@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "test": "NODE_ENV=test jest"
   },
   "repository": {
     "type": "git",
@@ -18,11 +19,14 @@
   },
   "homepage": "https://github.com/Antimaterium/webidia-blog-test#readme",
   "devDependencies": {
+    "@sucrase/jest-plugin": "^2.0.0",
+    "@types/jest": "^24.0.15",
     "eslint": "^6.0.1",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.0",
+    "jest": "^24.8.0",
     "nodemon": "^1.19.1",
     "prettier": "^1.18.2",
     "sequelize-cli": "^5.5.0",
