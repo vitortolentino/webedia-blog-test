@@ -2,6 +2,21 @@ import * as Yup from 'yup';
 import Author from '../models/Author';
 
 class AuthorController {
+  async index(req, res) {
+    const { page = 1, limit = 20 } = req.query;
+    console.log(page, limit);
+    const authors = await Author.findAll({
+      // where: {
+      //   status: true,
+      // },
+      limit: limit,
+      offset: (page - 1) * limit,
+      attributes: ['id', 'name', 'email'],
+    });
+
+    return res.json(authors);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
