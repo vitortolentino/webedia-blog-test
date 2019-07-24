@@ -2,7 +2,7 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.addColumn('authors', 'status', {
       type: Sequelize.BOOLEAN,
-      defaultValue: false,
+      defaultValue: true,
       allowNull: false,
     });
   },
