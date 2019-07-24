@@ -6,6 +6,10 @@ A blog API using industry best practices to deliver great results
 
 - [Installation](#installation)
 - [Usage](#usage)
+- [Configure Sentry](#sentry)
+- [Migrations](#migrations)
+- [Usage](#usage)
+- [Tests](#testes)
 
 ## Installation
 
