@@ -8,7 +8,6 @@ A blog API using industry best practices to deliver great results
 - [Usage](#usage)
 - [Configure Sentry](#sentry)
 - [Migrations](#migrations)
-- [Usage](#usage)
 - [Tests](#testes)
 
 ## Installation
