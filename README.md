@@ -65,6 +65,6 @@ Run tests
 
 or 
 
-```yarn test```
+```$ yarn test```
 
 If you have any questions, please feel free to contact me at vitorafonso33@gmail.com or by opening a pull request.
