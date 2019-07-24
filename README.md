@@ -5,8 +5,8 @@ A blog API using industry best practices to deliver great results
 ## Table of Contents
 
 - [Installation](#installation)
+- [Configure Sentry](#-configure-sentry)
 - [Usage](#usage)
-- [Configure Sentry](#sentry)
 - [Migrations](#migrations)
 - [Tests](#tests)
 
@@ -30,6 +30,12 @@ Go into [sentry.io](https://sentry.io/auth/login/) and create a new express proj
 
 Copy the DSN and paste it into SENTRY_DSN inside the .env file.
 
+## Usage
+
+Run project in development mode
+
+```npm run dev```  or ```yarn dev```
+
 ## Migrations
 
 run migrations with
@@ -37,12 +43,6 @@ run migrations with
 ```node_modules/.bin/sequelize db:migrate``` or ```yarn sequelize db:migrate```
 
 **Note:** Make sure your postgres database is up
-
-## Usage
-
-Run project in development mode
-
-```npm run dev```  or ```yarn dev```
 
 ## Tests
 
