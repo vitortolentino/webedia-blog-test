@@ -1,4 +1,4 @@
-import 'dotenv-safe/config';
+import '../bootstrap';
 
 export default {
   dsn: process.env.SENTRY_DSN,
