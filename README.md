@@ -5,7 +5,7 @@ A blog API using industry best practices to deliver great results
 ## Table of Contents
 
 - [Installation](#installation)
-- [Configure Sentry](#-configure-sentry)
+- [Configure Sentry](#configure-sentry-errors-management)
 - [Usage](#usage)
 - [Migrations](#migrations)
 - [Tests](#tests)
@@ -15,12 +15,17 @@ A blog API using industry best practices to deliver great results
 Clone the repository and create a .env file in root directory
 
 ```sh
-git clone https://github.com/Antimaterium/webedia-blog-test.git
-cd webedia-blog-test
-touch .env
+$ git clone https://github.com/Antimaterium/webedia-blog-test.git
+$ cd webedia-blog-test
+$ touch .env
 ```
 Then run
-```npm install``` or ```yarn install```
+
+```$ npm install``` 
+
+or
+
+```$ yarn install```
 
 Copy the contents of .env.example to .env and fill in the empty fields
 
@@ -34,13 +39,21 @@ Copy the DSN and paste it into SENTRY_DSN inside the .env file.
 
 Run project in development mode
 
-```npm run dev```  or ```yarn dev```
+```$ npm run dev```
+
+or
+
+```$ yarn dev```
 
 ## Migrations
 
 run migrations with
 
-```node_modules/.bin/sequelize db:migrate``` or ```yarn sequelize db:migrate```
+```$ node_modules/.bin/sequelize db:migrate``` 
+
+or 
+
+``` $ yarn sequelize db:migrate```
 
 **Note:** Make sure your postgres database is up
 
@@ -48,6 +61,10 @@ run migrations with
 
 Run tests
 
-```npm run test``` or ```yarn test```
+```$ npm run test``` 
+
+or 
+
+```yarn test```
 
 If you have any questions, please feel free to contact me at vitorafonso33@gmail.com or by opening a pull request.
