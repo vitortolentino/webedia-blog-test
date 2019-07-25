@@ -17,7 +17,7 @@ Clone the repository and create a .env file in root directory
 ```sh
 $ git clone https://github.com/Antimaterium/webedia-blog-test.git
 $ cd webedia-blog-test
-$ touch .env
+$ cp .env.example .env
 ```
 Then run
 
@@ -27,7 +27,6 @@ or
 
 ```$ yarn install```
 
-Copy the contents of .env.example to .env and fill in the empty fields
 
 ## Configure Sentry (errors management)
 
