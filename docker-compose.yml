@@ -9,3 +9,19 @@ services:
       - 5432:5432
     environment:
       - POSTGRES_PASSWORD=my_pass
+
+  application:
+    container_name: 'webedia-blog'
+    image: node:10.15.3
+    restart: on-failure
+    command: npm run dev
+    depends_on:
+      - postgres
+    ports:
+      - 3333:3333
+    environment:
+      - DB_DIALECT=postgres
+      - DB_HOST=localhost
+      - DB_USERNAME=postgres
+      - DB_PASS=my_pass
+      - DB_NAME=webedia
