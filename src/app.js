@@ -34,7 +34,9 @@ class App {
 
   exceptionHandler() {
     this.server.use(async (err, req, res, next) => {
-      if (err && process.env.NODE_ENV === 'development') {
+      const env = process.env.NODE_ENV;
+      if (err && (env === 'development' || env === 'test')) {
+        console.log(err);
         const errors = await new Youch(err, req).toJSON();
         return res.status(500).json(errors);
       }
