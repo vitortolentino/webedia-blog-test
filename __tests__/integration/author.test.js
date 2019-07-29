@@ -258,7 +258,6 @@ describe('Author', () => {
           email: authorMock.email,
         });
 
-      console.log(body);
       expect(body)
         .to.be.a('object')
         .that.have.all.keys(['email', 'name', 'id']);
