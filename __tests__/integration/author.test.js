@@ -175,4 +175,93 @@ describe('Author', () => {
       expect(status).to.be.equal(200);
     });
   });
+
+  describe('update', () => {
+    it('should respond status 200 with a valid author', async () => {
+      const { dataValues: authorMock } = await factories.create('Author');
+      const token = await generateToken(authorMock);
+      const { status } = await this.app
+        .put(`/author/${authorMock.id}`)
+        .set('Authorization', token)
+        .send({
+          name: 'Other Name',
+          email: 'new@email.com',
+        });
+
+      expect(status).to.be.equal(200);
+    });
+
+    it('should respond status 400 if name is empty', async () => {
+      const { dataValues: authorMock } = await factories.create('Author');
+      const token = await generateToken(authorMock);
+      const { status } = await this.app
+        .put(`/author/${authorMock.id}`)
+        .set('Authorization', token)
+        .send({
+          name: '',
+          email: authorMock.email,
+        });
+
+      expect(status).to.be.equal(400);
+    });
+
+    it('should respond status 400 if email is empty', async () => {
+      const { dataValues: authorMock } = await factories.create('Author');
+      const token = await generateToken(authorMock);
+      const { status } = await this.app
+        .put(`/author/${authorMock.id}`)
+        .set('Authorization', token)
+        .send({
+          name: authorMock.name,
+          email: '',
+        });
+
+      expect(status).to.be.equal(400);
+    });
+
+    it('should respond status 400 if id is NaN', async () => {
+      const { dataValues: authorMock } = await factories.create('Author');
+      const token = await generateToken(authorMock);
+      const { status } = await this.app
+        .put(`/author/someThing`)
+        .set('Authorization', token)
+        .send({
+          name: authorMock.name,
+          email: authorMock.email,
+        });
+
+      expect(status).to.be.equal(400);
+    });
+
+    it('should respond status 400 if author not exists', async () => {
+      const { dataValues: authorMock } = await factories.create('Author');
+      const token = await generateToken(authorMock);
+      const { status } = await this.app
+        .put(`/author/${authorMock.id + 1}`)
+        .set('Authorization', token)
+        .send({
+          name: authorMock.name,
+          email: authorMock.email,
+        });
+
+      expect(status).to.be.equal(400);
+    });
+
+    it('should respond status a object with name, id and email properties', async () => {
+      const { dataValues: authorMock } = await factories.create('Author');
+      const token = await generateToken(authorMock);
+      const { body } = await this.app
+        .put(`/author/${authorMock.id}`)
+        .set('Authorization', token)
+        .send({
+          name: authorMock.name,
+          email: authorMock.email,
+        });
+
+      console.log(body);
+      expect(body)
+        .to.be.a('object')
+        .that.have.all.keys(['email', 'name', 'id']);
+    });
+  });
 });

@@ -81,7 +81,7 @@ describe('Session', () => {
 
       expect(body)
         .to.have.a.property('author')
-        .that.have.all.keys({ email: null, name: null, id: null });
+        .that.have.all.keys(['email', 'name', 'id']);
     });
 
     it('should responde a token property not empty', async () => {

@@ -14,9 +14,14 @@ routes.post('/author', AuthorController.store);
 
 routes.post('/session', SessionController.store);
 
+// JWT AUTH
 routes.use('/', auth);
 
+// articles
 routes.post('/article', ArticleController.store);
+
+// authors
 routes.delete('/author/:id', AuthorController.delete);
+routes.put('/author/:id', AuthorController.update);
 
 export default routes;

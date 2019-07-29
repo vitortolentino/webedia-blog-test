@@ -74,6 +74,34 @@ class AuthorController {
 
     return res.status(200).send();
   }
+
+  async update(req, res) {
+    const schema = Yup.object().shape({
+      name: Yup.string().required(),
+      email: Yup.string()
+        .email()
+        .required(),
+      id: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid({ ...req.body, id: req.params.id }))) {
+      return res
+        .status(400)
+        .json({ error: 'Falha na validação de entrada de dados' });
+    }
+
+    const author = await Author.findByPk(req.params.id);
+    if (!author) {
+      return res.status(400).json({ error: 'Autor não encontrado' });
+    }
+
+    const { email, name } = req.body;
+    await author.update({
+      email,
+      name,
+    });
+    return res.status(200).json({ email, name, id: req.params.id });
+  }
 }
 
 export default new AuthorController();
