@@ -1,7 +1,6 @@
 import request from 'supertest';
 import factories from '../factories';
 import app from '../../src/app';
-import { Author } from '../../src/app/models';
 
 export default async (author = null) => {
   const serverApplication = await request(app);
