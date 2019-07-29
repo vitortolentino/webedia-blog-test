@@ -21,6 +21,7 @@ routes.use('/', auth);
 
 // articles
 routes.post('/article', ArticleController.store);
+routes.delete('/article/:id', ArticleController.delete);
 
 // authors
 routes.delete('/author/:id', AuthorController.delete);

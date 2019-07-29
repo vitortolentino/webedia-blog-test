@@ -191,4 +191,70 @@ describe('Article', () => {
       expect(articleArrayPageOne).not.to.be.deep.equal(articleArrayPageTwo);
     }, 30000);
   });
+
+  describe('delete', () => {
+    it('should respond status 200 with correct id and token', async () => {
+      const { dataValues: articleMock } = await Article.create({
+        title: lorem.word(),
+        subtitle: lorem.words(),
+        content: lorem.text(),
+        author_id: this.author.id,
+      });
+      const token = await generateToken(this.author);
+      const { status } = await this.app
+        .delete(`/article/${articleMock.id}`)
+        .set('Authorization', token);
+
+      expect(status).to.be.equal(200);
+    });
+
+    it('should respond status 400 if id is NaN', async () => {
+      const token = await generateToken();
+      const { status } = await this.app
+        .delete('/article/someThing')
+        .set('Authorization', token);
+
+      expect(status).to.be.equal(400);
+    });
+
+    it('should respond status 401 if author_id does not match with author_id from this article', async () => {
+      const token = await generateToken();
+      const { dataValues: articleMock } = await Article.create({
+        title: lorem.word(),
+        subtitle: lorem.words(),
+        content: lorem.text(),
+        author_id: this.author.id,
+      });
+      const { status } = await this.app
+        .delete(`/article/${articleMock.id}`)
+        .set('Authorization', token);
+
+      expect(status).to.be.equal(401);
+    });
+
+    it('should not contains deleted article in list of active articles id', async () => {
+      await Article.create({
+        title: lorem.word(),
+        subtitle: lorem.words(),
+        content: lorem.text(),
+        author_id: this.author.id,
+      });
+      const { dataValues: articleMock } = await Article.create({
+        title: lorem.word(),
+        subtitle: lorem.words(),
+        content: lorem.text(),
+        author_id: this.author.id,
+      });
+      const token = await generateToken(this.author);
+      await this.app
+        .delete(`/article/${articleMock.id}`)
+        .set('Authorization', token);
+
+      const articlesArray = await Article.findAll({
+        raw: true,
+        attributes: ['id'],
+      });
+      expect(articlesArray).to.not.have.deep.include({ id: articleMock.id });
+    });
+  });
 });

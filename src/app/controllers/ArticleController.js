@@ -43,6 +43,39 @@ class ArticleController {
 
     return res.json(article);
   }
+
+  async delete(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+      author_id: Yup.number().required(),
+    });
+
+    const inputData = {
+      ...req.params,
+      author_id: req.author_id,
+    };
+
+    if (!(await schema.isValid(inputData))) {
+      return res
+        .status(400)
+        .json({ error: 'Falha na validação de entrada de dados' });
+    }
+
+    const article = await Article.findByPk(req.params.id);
+    if (!article) {
+      return res.status(400).json({ error: 'Artigo não encontrado' });
+    }
+
+    if (Number(article.author_id) !== Number(req.author_id)) {
+      return res.status(401).json({
+        error: 'Você não tem permissão de remover um artigo de outro autor',
+      });
+    }
+
+    await article.destroy();
+
+    return res.status(200).send();
+  }
 }
 
 export default new ArticleController();
