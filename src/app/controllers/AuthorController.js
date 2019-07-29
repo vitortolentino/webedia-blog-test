@@ -72,6 +72,15 @@ class AuthorController {
         .json({ error: 'Você não tem permissão de remover outro autor' });
     }
 
+    const author = await Author.findByPk(req.params.id);
+    if (!author) {
+      return res.status(400).json({ error: 'Autor não encontrado' });
+    }
+
+    await author.update({
+      status: false,
+    });
+
     return res.status(200).send();
   }
 

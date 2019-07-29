@@ -7,6 +7,7 @@ import app from '../../src/app';
 import factories from '../factories';
 import truncate from '../util/truncate';
 import generateToken from '../util/token';
+import { Author } from '../../src/app/models';
 
 describe('Author', () => {
   afterAll(truncate);
@@ -173,6 +174,24 @@ describe('Author', () => {
         .set('Authorization', token);
 
       expect(status).to.be.equal(200);
+    });
+
+    it('should not contains deleted author in list of active authors id', async () => {
+      await factories.create('Author');
+      const { dataValues: authorMock } = await factories.create('Author');
+      const token = await generateToken(authorMock);
+      await this.app
+        .delete(`/author/${authorMock.id}`)
+        .set('Authorization', token);
+
+      const authorsArray = await Author.findAll({
+        raw: true,
+        where: {
+          status: true,
+        },
+        attributes: ['id'],
+      });
+      expect(authorsArray).to.not.have.deep.include({ id: authorMock.id });
     });
   });
 
