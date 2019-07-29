@@ -6,6 +6,8 @@ import app from '../../src/app';
 import auth from '../../src/app/middlewares/auth';
 import truncate from '../util/truncate';
 
+jest.setTimeout(60000);
+
 afterAll(truncate);
 
 beforeAll(async () => {

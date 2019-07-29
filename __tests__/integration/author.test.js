@@ -9,6 +9,8 @@ import truncate from '../util/truncate';
 import generateToken from '../util/token';
 import { Author } from '../../src/app/models';
 
+jest.setTimeout(60000);
+
 describe('Author', () => {
   afterAll(truncate);
 

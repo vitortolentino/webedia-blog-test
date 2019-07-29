@@ -8,6 +8,8 @@ import truncate from '../util/truncate';
 import generateToken from '../util/token';
 import { Article } from '../../src/app/models';
 
+jest.setTimeout(60000);
+
 describe('Article', () => {
   afterAll(truncate);
 
@@ -287,6 +289,7 @@ describe('Article', () => {
         content: lorem.text(),
         author_id: this.author.id,
       });
+
       const { status } = await this.app
         .put(`/article/${articleMock.id}`)
         .set('Authorization', token)
@@ -386,6 +389,7 @@ describe('Article', () => {
         content: lorem.text(),
         author_id: this.author.id,
       });
+
       const { body } = await this.app
         .put(`/article/${articleMock.id}`)
         .set('Authorization', token)
@@ -395,8 +399,9 @@ describe('Article', () => {
           content: articleMock.content,
         });
 
-      expect(body).to.be.a('object');
-      //.that.have.all.keys(['title', 'subtitle', 'content', 'id']);
+      expect(body)
+        .to.be.a('object')
+        .that.have.all.keys(['title', 'subtitle', 'content', 'id']);
     });
   });
 });

@@ -5,7 +5,7 @@ import { internet } from 'faker';
 
 import factories from '../factories';
 import app from '../../src/app';
-
+jest.setTimeout(60000);
 describe('Session', () => {
   beforeAll(async () => {
     this.app = await request(app);
@@ -82,7 +82,7 @@ describe('Session', () => {
       expect(body)
         .to.have.a.property('author')
         .that.have.all.keys(['email', 'name', 'id']);
-    });
+    }, 30000);
 
     it('should responde a token property not empty', async () => {
       const { dataValues: authorMock } = await factories.create('Author');
@@ -92,6 +92,6 @@ describe('Session', () => {
       });
 
       expect(body).to.have.a.property('token').to.be.not.empty;
-    });
+    }, 30000);
   });
 });
