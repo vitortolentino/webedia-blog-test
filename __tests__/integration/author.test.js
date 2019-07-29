@@ -128,7 +128,7 @@ describe('Author', () => {
       expect(authorArrayPageOne).to.be.deep.equal(authorArrayPageTwo);
     });
 
-    it('must respond two different arrays', async () => {
+    it('should respond two different arrays', async () => {
       for (let index = 0; index < 20; index++) {
         await this.app
           .post('/author')

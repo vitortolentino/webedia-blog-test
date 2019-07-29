@@ -1,7 +1,28 @@
 import * as Yup from 'yup';
-import { Article } from '../models';
+import { Article, Author } from '../models';
 
 class ArticleController {
+  async index(req, res) {
+    const { page = 1, limit = 20 } = req.query;
+    const articles = await Article.findAll({
+      limit,
+      offset: (page - 1) * limit,
+      attributes: ['id', 'title', 'subtitle', 'content'],
+      include: [
+        {
+          model: Author,
+          as: 'author',
+          where: {
+            status: true,
+          },
+          attributes: ['name', 'email'],
+        },
+      ],
+    });
+
+    return res.json(articles);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       title: Yup.string().required(),

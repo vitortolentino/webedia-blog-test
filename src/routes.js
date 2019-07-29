@@ -9,10 +9,12 @@ import auth from '../src/app/middlewares/auth';
 
 const routes = new Router();
 
+routes.post('/session', SessionController.store);
+
 routes.get('/author', AuthorController.index);
 routes.post('/author', AuthorController.store);
 
-routes.post('/session', SessionController.store);
+routes.get('/article', ArticleController.index);
 
 // JWT AUTH
 routes.use('/', auth);

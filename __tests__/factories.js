@@ -1,18 +1,18 @@
-import faker from 'faker';
+import { name, internet, lorem } from 'faker';
 import { factory } from 'factory-girl';
 
 import { Author, Article } from '../src/app/models';
 
 factory.define('Author', Author, () => ({
-  name: faker.name.findName(),
-  email: faker.internet.email(),
-  password: faker.internet.password(),
+  name: name.findName(),
+  email: internet.email(),
+  password: internet.password(),
 }));
 
 factory.define('Article', Article, () => ({
-  title: faker.lorem.word(),
-  subtitle: faker.lorem.words(),
-  content: faker.lorem.text(),
+  title: lorem.word(),
+  subtitle: lorem.words(),
+  content: lorem.text(),
 }));
 
 export default factory;
