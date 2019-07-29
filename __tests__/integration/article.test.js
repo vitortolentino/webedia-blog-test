@@ -257,4 +257,146 @@ describe('Article', () => {
       expect(articlesArray).to.not.have.deep.include({ id: articleMock.id });
     });
   });
+
+  describe('update', () => {
+    it('should respond status 200 with a valid article', async () => {
+      const token = await generateToken(this.author);
+      const { dataValues: articleMock } = await Article.create({
+        title: lorem.word(),
+        subtitle: lorem.words(),
+        content: lorem.text(),
+        author_id: this.author.id,
+      });
+      const { status } = await this.app
+        .put(`/article/${articleMock.id}`)
+        .set('Authorization', token)
+        .send({
+          title: 'other title',
+          subtitle: 'other subtitle',
+          content: 'other content',
+        });
+
+      expect(status).to.be.equal(200);
+    });
+
+    it('should respond status 400 if title is empty', async () => {
+      const token = await generateToken(this.author);
+      const { dataValues: articleMock } = await Article.create({
+        title: lorem.word(),
+        subtitle: lorem.words(),
+        content: lorem.text(),
+        author_id: this.author.id,
+      });
+      const { status } = await this.app
+        .put(`/article/${articleMock.id}`)
+        .set('Authorization', token)
+        .send({
+          title: '',
+          subtitle: 'other subtitle',
+          content: 'other content',
+        });
+
+      expect(status).to.be.equal(400);
+    });
+
+    it('should respond status 400 if subtitle is empty', async () => {
+      const token = await generateToken(this.author);
+      const { dataValues: articleMock } = await Article.create({
+        title: lorem.word(),
+        subtitle: lorem.words(),
+        content: lorem.text(),
+        author_id: this.author.id,
+      });
+      const { status } = await this.app
+        .put(`/article/${articleMock.id}`)
+        .set('Authorization', token)
+        .send({
+          title: 'other title',
+          subtitle: '',
+          content: 'other content',
+        });
+
+      expect(status).to.be.equal(400);
+    });
+
+    it('should respond status 400 if content is empty', async () => {
+      const token = await generateToken(this.author);
+      const { dataValues: articleMock } = await Article.create({
+        title: lorem.word(),
+        subtitle: lorem.words(),
+        content: lorem.text(),
+        author_id: this.author.id,
+      });
+      const { status } = await this.app
+        .put(`/article/${articleMock.id}`)
+        .set('Authorization', token)
+        .send({
+          title: 'other title',
+          subtitle: 'other subtitle',
+          content: '',
+        });
+
+      expect(status).to.be.equal(400);
+    });
+
+    it('should respond status 400 if id is NaN', async () => {
+      const token = await generateToken(this.author);
+      const { dataValues: articleMock } = await Article.create({
+        title: lorem.word(),
+        subtitle: lorem.words(),
+        content: lorem.text(),
+        author_id: this.author.id,
+      });
+      const { status } = await this.app
+        .put(`/article/someThing`)
+        .set('Authorization', token)
+        .send({
+          title: articleMock.title,
+          subtitle: articleMock.subtitle,
+          content: articleMock.content,
+        });
+
+      expect(status).to.be.equal(400);
+    });
+
+    it('should respond status 400 if article not exists', async () => {
+      const token = await generateToken(this.author);
+      const { dataValues: articleMock } = await Article.create({
+        title: lorem.word(),
+        subtitle: lorem.words(),
+        content: lorem.text(),
+        author_id: this.author.id,
+      });
+      const { status } = await this.app
+        .put(`/article/${articleMock.id + 1}`)
+        .set('Authorization', token)
+        .send({
+          title: articleMock.title,
+          subtitle: articleMock.subtitle,
+          content: articleMock.content,
+        });
+
+      expect(status).to.be.equal(400);
+    });
+    it('should respond status a object with title, subtitle, content and id properties', async () => {
+      const token = await generateToken(this.author);
+      const { dataValues: articleMock } = await Article.create({
+        title: lorem.word(),
+        subtitle: lorem.words(),
+        content: lorem.text(),
+        author_id: this.author.id,
+      });
+      const { body } = await this.app
+        .put(`/article/${articleMock.id}`)
+        .set('Authorization', token)
+        .send({
+          title: articleMock.title,
+          subtitle: articleMock.subtitle,
+          content: articleMock.content,
+        });
+
+      expect(body).to.be.a('object');
+      //.that.have.all.keys(['title', 'subtitle', 'content', 'id']);
+    });
+  });
 });

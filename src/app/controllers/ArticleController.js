@@ -76,6 +76,36 @@ class ArticleController {
 
     return res.status(200).send();
   }
+
+  async update(req, res) {
+    const schema = Yup.object().shape({
+      title: Yup.string().required(),
+      subtitle: Yup.string().required(),
+      content: Yup.string().required(),
+      id: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid({ ...req.body, id: req.params.id }))) {
+      return res
+        .status(400)
+        .json({ error: 'Falha na validação de entrada de dados' });
+    }
+
+    const article = await Article.findByPk(req.params.id);
+    if (!article) {
+      return res.status(400).json({ error: 'Artigo não encontrado' });
+    }
+
+    const { title, subtitle, content } = req.body;
+    await article.update({
+      title,
+      subtitle,
+      content,
+    });
+    return res
+      .status(200)
+      .json({ title, subtitle, content, id: req.params.id });
+  }
 }
 
 export default new ArticleController();
