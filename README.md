@@ -7,7 +7,7 @@ A blog API using industry best practices to deliver great results
 - [Installation](#installation)
 - [Configure Sentry](#configure-sentry-errors-management)
 - [Usage](#usage)
-- [Migrations](#migrations)
+- [Database](#database)
 - [Tests](#tests)
 
 ## Installation
@@ -44,7 +44,9 @@ or
 
 ```$ yarn dev```
 
-## Migrations
+## Database
+
+You can use the dump (webedia.sql) in the root or run the migrations like bellow
 
 run migrations with
 
