@@ -84,7 +84,7 @@ describe('Session', () => {
         .that.have.all.keys({ email: null, name: null, id: null });
     });
 
-    it('should responde a token propery not empty', async () => {
+    it('should responde a token property not empty', async () => {
       const { dataValues: authorMock } = await factories.create('Author');
       const { body } = await this.app.post('/session').send({
         email: authorMock.email,

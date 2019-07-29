@@ -48,6 +48,32 @@ class AuthorController {
       email,
     });
   }
+
+  async delete(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+      author_id: Yup.number().required(),
+    });
+
+    const inputData = {
+      ...req.params,
+      author_id: req.author_id,
+    };
+
+    if (!(await schema.isValid(inputData))) {
+      return res
+        .status(400)
+        .json({ error: 'Falha na validação de entrada de dados' });
+    }
+
+    if (Number(req.author_id) !== Number(req.params.id)) {
+      return res
+        .status(401)
+        .json({ error: 'Você não tem permissão de remover outro autor' });
+    }
+
+    return res.status(200).send();
+  }
 }
 
 export default new AuthorController();

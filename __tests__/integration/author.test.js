@@ -1,11 +1,12 @@
 /* instanbu */
 import request from 'supertest';
 import { expect } from 'chai';
-import { internet, lorem } from 'faker';
+import { internet, lorem, random } from 'faker';
 
 import app from '../../src/app';
 import factories from '../factories';
 import truncate from '../util/truncate';
+import generateToken from '../util/token';
 
 describe('Author', () => {
   afterAll(truncate);
@@ -23,7 +24,7 @@ describe('Author', () => {
     this.author = { name, email, password };
   });
 
-  describe('store method', () => {
+  describe('store', () => {
     it('should be able to register a Author', async () => {
       const { status } = await this.app.post('/author').send({
         ...this.author,
@@ -82,7 +83,7 @@ describe('Author', () => {
     });
   });
 
-  describe('index method', () => {
+  describe('index', () => {
     it('should respond an array', async () => {
       const result = await this.app.get('/author');
 
@@ -96,6 +97,82 @@ describe('Author', () => {
 
       const { body: authorArray } = await this.app.get('/author');
       expect(authorArray[0]).to.be.deep.equal(author);
+    });
+
+    it('should respond an array with size 20', async () => {
+      const maxSize = 20;
+      for (let index = 0; index < maxSize; index++) {
+        await this.app
+          .post('/author')
+          .send(await factories.create('Author').dataValues);
+      }
+      const { body: authorArray } = await this.app.get('/author');
+      expect(authorArray).to.have.lengthOf(maxSize);
+    });
+
+    it('should respond two identical arrays', async () => {
+      for (let index = 0; index < 20; index++) {
+        await this.app
+          .post('/author')
+          .send(await factories.create('Author').dataValues);
+      }
+
+      const { body: authorArrayPageOne } = await this.app.get(
+        '/author?limit=10'
+      );
+      const { body: authorArrayPageTwo } = await this.app.get(
+        '/author?limit=10&page=1'
+      );
+
+      expect(authorArrayPageOne).to.be.deep.equal(authorArrayPageTwo);
+    });
+
+    it('must respond two different arrays', async () => {
+      for (let index = 0; index < 20; index++) {
+        await this.app
+          .post('/author')
+          .send(await factories.create('Author').dataValues);
+      }
+
+      const { body: authorArrayPageOne } = await this.app.get(
+        '/author?limit=10'
+      );
+      const { body: authorArrayPageTwo } = await this.app.get(
+        '/author?limit=10&page=2'
+      );
+
+      expect(authorArrayPageOne).not.to.be.deep.equal(authorArrayPageTwo);
+    });
+  });
+
+  describe('delete', () => {
+    it('should respond status 400 if id is NaN', async () => {
+      const token = await generateToken();
+      const { status } = await this.app
+        .delete('/author/someThing')
+        .set('Authorization', token);
+
+      expect(status).to.be.equal(400);
+    });
+
+    it('should respond status 401 if author_id does not match with id', async () => {
+      const token = await generateToken();
+      const { dataValues: authorMock } = await factories.create('Author');
+      const { status } = await this.app
+        .delete(`/author/${authorMock.id}`)
+        .set('Authorization', token);
+
+      expect(status).to.be.equal(401);
+    });
+
+    it('should respond status 200 with correct id and token', async () => {
+      const { dataValues: authorMock } = await factories.create('Author');
+      const token = await generateToken(authorMock);
+      const { status } = await this.app
+        .delete(`/author/${authorMock.id}`)
+        .set('Authorization', token);
+
+      expect(status).to.be.equal(200);
     });
   });
 });

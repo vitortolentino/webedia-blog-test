@@ -4,6 +4,7 @@ import { expect } from 'chai';
 import app from '../../src/app';
 import factories from '../factories';
 import truncate from '../util/truncate';
+import generateToken from '../util/token';
 
 describe('Article', () => {
   afterAll(truncate);
@@ -15,48 +16,64 @@ describe('Article', () => {
   beforeEach(async () => {
     truncate();
     const article = (await factories.build('Article')).dataValues;
-    const { id: author_id } = (await factories.create('Author')).dataValues;
+    this.author = (await factories.create('Author')).dataValues;
     this.article = {
-      author_id,
+      author_id: this.author.id,
       title: article.title,
       subtitle: article.subtitle,
       content: article.content,
     };
   });
 
-  describe('store method', () => {
+  describe('store', () => {
     it('should respond with status 400 if title is empty', async () => {
-      const { status } = await this.app.post('/article').send({
-        ...this.article,
-        title: '',
-      });
+      const token = await generateToken(this.author);
+      const { status } = await this.app
+        .post('/article')
+        .set('Authorization', token)
+        .send({
+          ...this.article,
+          title: '',
+        });
 
       expect(status).to.be.equal(400);
     });
 
     it('should respond with status 400 if subtitle is empty', async () => {
-      const { status } = await this.app.post('/article').send({
-        ...this.article,
-        subtitle: '',
-      });
+      const token = await generateToken(this.author);
+      const { status } = await this.app
+        .post('/article')
+        .set('Authorization', token)
+        .send({
+          ...this.article,
+          subtitle: '',
+        });
 
       expect(status).to.be.equal(400);
     });
 
     it('should respond with status 400 if content is empty', async () => {
-      const { status } = await this.app.post('/article').send({
-        ...this.article,
-        content: '',
-      });
+      const token = await generateToken(this.author);
+      const { status } = await this.app
+        .post('/article')
+        .set('Authorization', token)
+        .send({
+          ...this.article,
+          content: '',
+        });
 
       expect(status).to.be.equal(400);
     });
 
     it('should respond with status 400 if author_id is not informed', async () => {
-      const { status } = await this.app.post('/article').send({
-        ...this.article,
-        author_id: undefined,
-      });
+      const token = await generateToken(this.author);
+      const { status } = await this.app
+        .post('/article')
+        .set('Authorization', token)
+        .send({
+          ...this.article,
+          author_id: undefined,
+        });
 
       expect(status).to.be.equal(400);
     });
@@ -71,16 +88,20 @@ describe('Article', () => {
     });
 
     it('should be able to register an Article', async () => {
+      const token = await generateToken(this.author);
       const { status } = await this.app
         .post('/article')
+        .set('Authorization', token)
         .send({ ...this.article });
 
       expect(status).to.be.equal(200);
     });
 
     it('should respond an object with id property', async () => {
+      const token = await generateToken(this.author);
       const { body: article } = await this.app
         .post('/article')
+        .set('Authorization', token)
         .send({ ...this.article });
 
       expect(article).to.have.property('id');
